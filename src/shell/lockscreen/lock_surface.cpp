@@ -1070,20 +1070,37 @@ void LockSurface::onKeyboardEvent(const KeyboardEvent& event) {
     return;
   }
 
-  if (m_locked && event.pressed && m_mpris != nullptr) {
-    if (event.sym == XKB_KEY_XF86AudioPlay || event.sym == XKB_KEY_XF86AudioPause) {
-      (void)m_mpris->playPauseActive();
-      requestUpdate();
+  if (m_locked && event.pressed) {
+    if (event.sym == XKB_KEY_XF86AudioPlay) {
+      m_connection.stopKeyRepeat();
+      if (m_mpris != nullptr) {
+        (void)m_mpris->playPauseActive();
+        requestUpdate();
+      }
+      return;
+    }
+    if (event.sym == XKB_KEY_XF86AudioPause) {
+      m_connection.stopKeyRepeat();
+      if (m_mpris != nullptr) {
+        (void)m_mpris->pauseActive();
+        requestUpdate();
+      }
       return;
     }
     if (event.sym == XKB_KEY_XF86AudioNext) {
-      (void)m_mpris->nextActive();
-      requestUpdate();
+      m_connection.stopKeyRepeat();
+      if (m_mpris != nullptr) {
+        (void)m_mpris->nextActive();
+        requestUpdate();
+      }
       return;
     }
     if (event.sym == XKB_KEY_XF86AudioPrev) {
-      (void)m_mpris->previousActive();
-      requestUpdate();
+      m_connection.stopKeyRepeat();
+      if (m_mpris != nullptr) {
+        (void)m_mpris->previousActive();
+        requestUpdate();
+      }
       return;
     }
   }
